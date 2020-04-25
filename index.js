@@ -80,7 +80,12 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                        }
                     } else if (type === 'Merit Badge') {
                         const scoutAdvancement = scout.advancement;
-                        rankAdvancement = new ScoutbookMeritBadgeAdvancement(advancement, advancementVersion);
+                        const discontinueIndex = advancement.indexOf('  Discontinued');
+                        let mbName = advancement;
+                        if (discontinueIndex !== -1) {
+                            mbName = advancement.substr(0, discontinueIndex-1);
+                        }
+                        rankAdvancement = new ScoutbookMeritBadgeAdvancement(mbName, advancementVersion);
                         scoutAdvancement.addMeritBadge(rankAdvancement);
                     }
                     else if (scoutsBSARankRequirementAdvancementTypes[type] !== undefined) {
