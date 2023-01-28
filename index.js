@@ -43,9 +43,9 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
         .then(function (importedData) {
             importedData.forEach(advancementRecord => {
                 const bsaId = advancementRecord['BSA Member ID'];
-                const firstName = advancementRecord['First Name'];
-                const middleName = advancementRecord['Middle Name'];
-                const lastName = advancementRecord['Last Name'];
+                const firstName = advancementRecord['First Name'].trim();
+                const middleName = advancementRecord['Middle Name'].trim();
+                const lastName = advancementRecord['Last Name'].trim();
                 const type = advancementRecord['Advancement Type'];
                 const advancement = advancementRecord['Advancement'];
                 const advancementVersion = advancementRecord['Version'];
