@@ -52,12 +52,30 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                 const dateCompleted = advancementRecord['Date Completed'];
                 const approved = advancementRecord['Approved'] === '1';
                 const awarded = advancementRecord['Awarded'] === '1';
-                const completedBy = advancementRecord['MarkedCompletedBy'];
-                const completedOn = advancementRecord['MarkedCompletedDate'];
-                const approvedBy = advancementRecord['LeaderApprovedBy'];
-                const approvedOn = advancementRecord['LeaderApprovedDate'];
-                const awardedBy = advancementRecord['AwardedBy'];
-                const awardedOn = advancementRecord['AwardedDate'];
+                const completedBy = Object.hasOwn(advancementRecord, 'MarkedCompletedBy') ?
+                    advancementRecord['MarkedCompletedBy'] :
+                Object.hasOwn(advancementRecord, 'Marked Completed By') ?
+                    advancementRecord['Marked Completed By'] : undefined  ;
+                const completedOn = Object.hasOwn(advancementRecord, 'MarkedCompletedDate') ?
+                    advancementRecord['MarkedCompletedDate'] :
+                    Object.hasOwn(advancementRecord, 'Marked Completed Date') ?
+                        advancementRecord['Marked Completed Date'] : undefined;
+                const approvedBy = Object.hasOwn(advancementRecord, 'LeaderApprovedBy') ?
+                    advancementRecord['LeaderApprovedBy'] :
+                    Object.hasOwn(advancementRecord, 'Leader Approved By') ?
+                        advancementRecord['Leader Approved By'] : undefined;
+                const approvedOn = Object.hasOwn(advancementRecord, 'LeaderApprovedDate') ?
+                    advancementRecord['LeaderApprovedDate'] :
+                    Object.hasOwn(advancementRecord, 'Leader Approved Date') ?
+                        advancementRecord['Leader Approved Date'] : undefined;
+                const awardedBy = Object.hasOwn(advancementRecord, 'AwardedBy') ?
+                    advancementRecord['AwardedBy'] :
+                    Object.hasOwn(advancementRecord, 'Awarded By') ?
+                        advancementRecord['Awarded By'] : undefined;
+                const awardedOn = Object.hasOwn(advancementRecord, 'AwardedDate') ?
+                    advancementRecord['AwardedDate'] :
+                    Object.hasOwn(advancementRecord, 'Awarded Date') ?
+                        advancementRecord['Awarded Date'] : undefined;
 
                 const scoutKey = bsaId + '_' + firstName  + '_' + lastName;
                 let scout;
@@ -110,19 +128,19 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                     if (rankAdvancement) {
                         if (dateCompleted !== '') {
                             rankAdvancement.completionDate = stringToDate(dateCompleted);
-                            if (completedBy !== '' || completedOn !== '') {
+                            if (completedOn !== undefined && (completedBy !== '' || completedOn !== '')) {
                                 rankAdvancement.markedCompleted = new ScoutbookAuditMark(completedBy, stringToDate(completedOn));
                             }
                         }
                         if (approved) {
                             rankAdvancement.isApproved = true;
-                            if (approvedBy !== '' || approvedOn !== '') {
+                            if (approvedOn !== undefined && (approvedBy !== '' || approvedOn !== '')) {
                                 rankAdvancement.markedApproved = new ScoutbookAuditMark(approvedBy, stringToDate(approvedOn));
                             }
                         }
                         if (awarded) {
                             rankAdvancement.isAwarded = true;
-                            if (awardedBy !== '' || awardedOn !== '') {
+                            if ( awardedOn !== undefined && (awardedBy !== '' || awardedOn !== '')) {
                                 rankAdvancement.markedAwarded = new ScoutbookAuditMark(awardedBy, stringToDate(awardedOn));
                             }
                         }
