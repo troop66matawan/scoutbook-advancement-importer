@@ -46,8 +46,8 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                 const firstName = advancementRecord['First Name'].trim();
                 const middleName = advancementRecord['Middle Name'].trim();
                 const lastName = advancementRecord['Last Name'].trim();
-                const type = advancementRecord['Advancement Type'];
-                const advancement = advancementRecord['Advancement'];
+                let advancementType = advancementRecord['Advancement Type'];
+                let advancement = advancementRecord['Advancement'];
                 const advancementVersion = advancementRecord['Version'];
                 const dateCompleted = advancementRecord['Date Completed'];
                 const approved = advancementRecord['Approved'] === '1';
@@ -68,9 +68,17 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                     scouts[scoutKey] = scout;
                 }
 
-                if (supportedTypes.includes(type) || scoutsBSARankRequirementAdvancementTypes.hasOwnProperty(type)) {
+                if(advancementType === 'Merit Badges') {
+                    advancementType = 'Merit Badge'
+                }
+                if (supportedTypes.includes(advancementType) || scoutsBSARankRequirementAdvancementTypes.hasOwnProperty(advancementType)) {
                     let rankAdvancement;
-                    if (type === 'Rank') {
+                    if (advancementType === 'Rank') {
+                        const rankSuffix = ' Rank'
+                        if (advancement.endsWith(rankSuffix)) {
+                            const splits =  advancement.split(rankSuffix);
+                            advancement = splits[0];
+                        }
                        if (ScoutbookAdvancement.supportedRanks.includes(advancement)) {
                            const scoutAdvancement = scout.advancement;
                            if (scoutAdvancement[advancement] === undefined) {
@@ -78,7 +86,7 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                            }
                            rankAdvancement = scoutAdvancement[advancement];
                        }
-                    } else if (type === 'Merit Badge') {
+                    } else if (advancementType === 'Merit Badge') {
                         const scoutAdvancement = scout.advancement;
                         const discontinueIndex = advancement.indexOf('  Discontinued');
                         let mbName = advancement;
@@ -88,8 +96,8 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                         rankAdvancement = new ScoutbookMeritBadgeAdvancement(mbName, advancementVersion);
                         scoutAdvancement.addMeritBadge(rankAdvancement);
                     }
-                    else if (scoutsBSARankRequirementAdvancementTypes[type] !== undefined) {
-                        let rank = scoutsBSARankRequirementAdvancementTypes[type];
+                    else if (scoutsBSARankRequirementAdvancementTypes[advancementType] !== undefined) {
+                        let rank = scoutsBSARankRequirementAdvancementTypes[advancementType];
                         if (ScoutbookAdvancement.supportedRanks.includes(rank)) {
                             let scoutAdvancement = scout.advancement;
                             if (scoutAdvancement[rank] === undefined) {
