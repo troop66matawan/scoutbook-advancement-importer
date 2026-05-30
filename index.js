@@ -50,8 +50,8 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                 let advancement = advancementRecord['Advancement'];
                 const advancementVersion = advancementRecord['Version'];
                 const dateCompleted = advancementRecord['Date Completed'];
-                const approved = advancementRecord['Approved'] === '1';
-                const awarded = advancementRecord['Awarded'] === '1';
+                const approved = advancementRecord['Approved'] === '1' || advancementRecord['Approved'] === "True";
+                const awarded = advancementRecord['Awarded'] === '1' || advancementRecord['Awarded'] === 'True';
                 const completedBy = Object.hasOwn(advancementRecord, 'MarkedCompletedBy') ?
                     advancementRecord['MarkedCompletedBy'] :
                 Object.hasOwn(advancementRecord, 'Marked Completed By') ?
