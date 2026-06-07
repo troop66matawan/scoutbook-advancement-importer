@@ -107,10 +107,15 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
                     } else if (advancementType === 'Merit Badge') {
                         const scoutAdvancement = scout.advancement;
                         const discontinueIndex = advancement.indexOf('  Discontinued');
-                        let mbName = advancement;
                         if (discontinueIndex !== -1) {
                             mbName = advancement.substr(0, discontinueIndex-1);
                         }
+                        const mbSuffix = ' MB';
+                        if (advancement.endsWith(mbSuffix)) {
+                            const splits = advancement.split(mbSuffix);
+                            advancement = splits[0];
+                        }
+                        let mbName = advancement;
                         rankAdvancement = new ScoutbookMeritBadgeAdvancement(mbName, advancementVersion);
                         scoutAdvancement.addMeritBadge(rankAdvancement);
                     }
