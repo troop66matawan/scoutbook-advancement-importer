@@ -22,6 +22,13 @@ exports.scoutbook_advancement_importer = function (scouts, importPath) {
         'Star Scout Rank Requirement': 'Star Scout',
         'Life Scout Rank Requirement': 'Life Scout',
         'Eagle Scout Rank Requirement': 'Eagle Scout',
+        'Scout Rank Requirements' : 'Scout',
+        'Tenderfoot Rank Requirements': 'Tenderfoot',
+        'Second Class Rank Requirements': 'Second Class',
+        'First Class Rank Requirements': 'First Class',
+        'Star Scout Rank Requirements': 'Star Scout',
+        'Life Scout Rank Requirements': 'Life Scout',
+        'Eagle Scout Rank Requirements': 'Eagle Scout',
     };
 
     function stringToDate(stringDate) {
